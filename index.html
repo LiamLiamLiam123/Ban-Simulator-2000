@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BAN SIMULATOR 2000</title>
+<style>
+  :root{
+    --grn:#4caf3f;
+    --grn-dark:#2e7d28;
+    --red:#d32f2b;
+    --red-dark:#8f1f1c;
+    --sky-top:#2f6fb0;
+    --sky-bot:#8fc6ec;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;padding:0;height:100%;
+    font-family:'Arial Black','Arial',sans-serif;
+    overflow:hidden;color:#111;
+  }
+  #root{ position:relative;width:100%;height:100vh; display:flex;align-items:center;justify-content:center; }
+  .hidden{display:none !important;}
+
+  /* ================= MENU ================= */
+  #menu-panel{
+    width:100%;height:100%;
+    background:linear-gradient(180deg,#2e7d28 0%, #6b8a1f 35%, #a83a1f 65%, #7a1f18 100%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;
+  }
+  .menu-inner{ width:min(1000px,94vw); display:flex;flex-direction:column; position:relative;z-index:2; }
+  .title-row{ display:flex;align-items:flex-end;justify-content:center;gap:14px;margin-bottom:44px;flex-wrap:wrap; }
+  h1.title{
+    font-size:clamp(30px,6.2vw,64px); color:#0a0a0a; -webkit-text-stroke:1.5px #050505;
+    margin:0;letter-spacing:1px;text-shadow:3px 3px 0 rgba(0,0,0,.25); transform:skewX(-2deg);
+  }
+  .title-2000{
+    font-size:clamp(30px,6.2vw,64px); color:#c62828;
+    text-shadow:4px 4px 0 #6e0f0c, -1px -1px 0 #ff8a80; letter-spacing:1px; transform:skewX(-2deg);
+  }
+  .menu-body{ display:flex;align-items:center;justify-content:space-between;gap:20px; }
+  .menu-buttons-col{ display:flex;flex-direction:column;gap:26px;align-items:flex-start; }
+  .pill-btn{
+    font-family:'Arial Black',sans-serif; font-weight:900; cursor:pointer;border:none;border-radius:40px;
+    color:#0d1b06; background:linear-gradient(180deg,#8fe07d 0%, var(--grn) 55%, var(--grn-dark) 100%);
+    box-shadow:0 6px 0 #1f5a1a, 0 10px 18px rgba(0,0,0,.35), inset 0 3px 4px rgba(255,255,255,.4);
+    transition:transform .07s ease;
+  }
+  .pill-btn:active{transform:translateY(5px);box-shadow:0 1px 0 #1f5a1a;}
+  #btn-play{ font-size:clamp(30px,3.6vw,44px); padding:20px 70px; border:6px solid var(--red);
+    box-shadow:0 7px 0 #1f5a1a, 0 0 0 3px rgba(0,0,0,.15), 0 14px 22px rgba(0,0,0,.4); }
+  #btn-howto{ font-size:clamp(18px,2vw,26px); padding:12px 38px; }
+  #btn-exit{ font-size:clamp(15px,1.7vw,20px); padding:9px 30px; }
+  .avatar-wrap{ flex:0 0 auto; display:flex; justify-content:center; }
+  .avatar-figure{ width:190px; }
+  .menu-footer{ margin-top:38px;text-align:center;color:rgba(0,0,0,.55); font-size:11px;letter-spacing:1px;font-family:'Courier New',monospace;font-weight:400; }
+
+  /* ================= HOWTO ================= */
+  #howto-panel{ width:100%;height:100%; background:linear-gradient(180deg,#2e7d28 0%, #6b8a1f 50%, #a83a1f 100%);
+    display:flex;align-items:center;justify-content:center; }
+  .howto-card{ width:min(600px,92vw);max-height:88vh;overflow:auto;
+    background:linear-gradient(180deg,#c0332d,#7a1a16); border-radius:22px;padding:24px 24px 26px;
+    box-shadow:0 18px 0 rgba(0,0,0,.25), 0 24px 40px rgba(0,0,0,.4); }
+  .howto-title{ text-align:center;font-family:'Arial Black',sans-serif;font-size:26px;
+    color:#fff2c8;-webkit-text-stroke:1px #4a0d0a;margin:0 0 14px; }
+  .howto-screen{ background:radial-gradient(circle at 30% 20%, #5fae3f, #2e7d28 70%);
+    border-radius:14px;padding:18px 20px;box-shadow:inset 0 6px 14px rgba(0,0,0,.3); }
+  .howto-screen p{color:#f4fff0;font-family:'Trebuchet MS',sans-serif;font-weight:600;line-height:1.55;font-size:14.5px;margin:0 0 10px;}
+  .howto-rule{display:flex;gap:8px;align-items:flex-start;margin:8px 0;}
+  .howto-rule .tag{flex:0 0 auto;font-weight:900;font-size:11px;padding:3px 9px;border-radius:6px;font-family:'Arial Black',sans-serif;}
+  .tag.ban{background:var(--red);color:#3a0605;}
+  .tag.ok{background:#ffe184;color:#3a2a05;}
+  #btn-back-menu{margin-top:18px;width:100%;}
+
+  /* ================= GAME ================= */
+  #game-panel{ width:100%;height:100%; }
+  .sky-bg{
+    width:100%;height:100%;
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bot) 55%, #cfe0dc 56%, #b9c2bd 100%);
+    position:relative;overflow:hidden; display:flex;align-items:center;justify-content:center;
+  }
+  .window-mullions{
+    position:absolute;top:0;bottom:44%;left:0;right:0;
+    background-image: repeating-linear-gradient(90deg, #1a3556 0px, #1a3556 10px, transparent 10px, transparent 21%);
+    opacity:.9;
+  }
+  .clouds{position:absolute;top:0;bottom:44%;left:0;right:0;pointer-events:none;}
+  .cloud{ position:absolute;background:rgba(255,255,255,.85);border-radius:50%;filter:blur(1px); }
+  .floor{ position:absolute;bottom:0;left:0;right:0;height:44%; background:linear-gradient(180deg,#b9c2bd,#9aa39d); }
+  .floor::before{
+    content:"";position:absolute;inset:0;
+    background-image: repeating-linear-gradient(0deg, rgba(0,0,0,.05) 0px, rgba(0,0,0,.05) 1px, transparent 1px, transparent 34px),
+                       repeating-linear-gradient(90deg, rgba(0,0,0,.05) 0px, rgba(0,0,0,.05) 1px, transparent 1px, transparent 34px);
+  }
+
+  /* lurking figure behind the window, grows more visible as the Watcher meter rises */
+  .overseer-lurker{
+    position:absolute; top:2%; left:50%; transform:translateX(-50%);
+    width:260px; height:260px; opacity:0; transition:opacity .4s ease, transform .4s ease;
+    filter:drop-shadow(0 10px 20px rgba(0,0,0,.5)); pointer-events:none; z-index:1;
+  }
+
+  .hud-row{
+    position:absolute;top:14px;left:0;right:0; display:flex;justify-content:space-between;align-items:flex-start;
+    padding:0 4vw;z-index:5;pointer-events:none;
+  }
+  .meter-col{ display:flex;flex-direction:column;align-items:center;gap:8px; pointer-events:auto; }
+  .meter-head{ width:64px;height:64px;border-radius:16px; display:flex;align-items:center;justify-content:center;font-size:30px;
+    border:3px solid #111;box-shadow:0 5px 10px rgba(0,0,0,.3); }
+  .meter-head.community{ background:linear-gradient(180deg,#e6d34e,#c9ab1f); }
+  .meter-head.overseer{ background:linear-gradient(180deg,#5a5f6b,#20232b); }
+  .meter-name{ font-family:'Trebuchet MS',sans-serif;font-size:11px;font-weight:900;color:#12233b;
+    background:rgba(255,255,255,.75);padding:2px 8px;border-radius:8px; }
+  .thermo{ width:26px;height:150px;border-radius:14px;background:#fff; border:3px solid #111;position:relative;overflow:hidden;
+    box-shadow:0 4px 8px rgba(0,0,0,.25); }
+  .thermo-fill{ position:absolute;bottom:0;left:0;right:0; transition:height .35s ease, background .35s ease; }
+  .thermo-fill.community{ background:linear-gradient(180deg,#ff5b4d,#c62828); }
+  .thermo-fill.overseer{ background:linear-gradient(180deg,#8f7bff,#2b1a5e); }
+
+  .center-hud{ position:absolute;top:16px;left:50%;transform:translateX(-50%); z-index:5;text-align:center;pointer-events:none; }
+  .level-badge{ background:rgba(20,30,20,.55);color:#ffe184;font-weight:900; border-radius:10px;padding:6px 18px;font-size:14px;
+    letter-spacing:1px; font-family:'Trebuchet MS',sans-serif; }
+  .score-line{ margin-top:6px;font-family:'Courier New',monospace;font-size:12px; color:#0d1b06;background:rgba(255,255,255,.6);
+    padding:3px 10px;border-radius:8px; }
+
+  .desk-scene{
+    position:absolute; bottom:14%; left:50%; transform:translateX(-50%);
+    z-index:4; width:min(700px,92vw); display:flex; align-items:flex-end; justify-content:center;
+    perspective:900px;
+  }
+  .desk-avatar{
+    width:150px; margin:0 20px 6px; opacity:0; transform:translateY(40px) rotateY(18deg) scale(.85);
+    transition:opacity .4s ease, transform .4s ease;
+  }
+  .desk-avatar.in{ opacity:1; transform:translateY(0) rotateY(18deg) scale(1); }
+  .desk-avatar.mirror{ transform:translateY(40px) rotateY(-18deg) scale(.85); }
+  .desk-avatar.mirror.in{ transform:translateY(0) rotateY(-18deg) scale(1); }
+
+  .case-monitor{ position:absolute;top:126px;left:50%;transform:translateX(-50%); z-index:6; width:min(560px,88vw); }
+  .monitor{ background:linear-gradient(180deg,#c0332d,#7a1a16); border-radius:26px; padding:14px 18px 20px;
+    box-shadow:0 18px 0 rgba(0,0,0,.25), 0 24px 40px rgba(0,0,0,.45); }
+  .monitor-screen{ background:radial-gradient(circle at 30% 20%, #5fae3f, #2e7d28 70%); border-radius:14px;
+    padding:18px 18px 16px; position:relative; box-shadow:inset 0 6px 14px rgba(0,0,0,.3); }
+  .case-user{ color:#ffe184;font-weight:900;font-family:'Trebuchet MS',sans-serif;font-size:18px;margin-bottom:4px;}
+  .case-desc{ color:#f4fff0;font-family:'Trebuchet MS',sans-serif;font-weight:600;font-size:15px;line-height:1.4;}
+
+  .feedback-flash{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:'Arial Black',sans-serif;font-size:40px;letter-spacing:2px;
+    pointer-events:none;opacity:0;color:#fff;text-shadow:0 4px 0 rgba(0,0,0,.4); z-index:8;
+  }
+  .feedback-flash.show{animation:stampIn .55s ease-out forwards;}
+  @keyframes stampIn{
+    0%{opacity:0;transform:scale(2) rotate(-10deg);}
+    35%{opacity:1;transform:scale(.9) rotate(-8deg);}
+    55%{transform:scale(1.05) rotate(-8deg);}
+    100%{opacity:0;transform:scale(1) rotate(-8deg);}
+  }
+  .feedback-flash.correct{color:#4caf3f;}
+  .feedback-flash.wrong{color:#d32f2b;}
+
+  .buttons-row{
+    position:absolute;bottom:4%;left:0;right:0; display:flex;justify-content:space-between;align-items:flex-end;
+    padding:0 8vw;z-index:6;
+  }
+  .dome-btn{
+    width:min(170px,26vw);height:min(100px,16vw);
+    border-radius:50% 50% 46% 46% / 70% 70% 40% 40%;
+    border:none;cursor:pointer;position:relative;
+    box-shadow:0 10px 0 rgba(0,0,0,.3), 0 16px 22px rgba(0,0,0,.35);
+  }
+  .dome-btn.ban{ background:radial-gradient(circle at 35% 25%, #ff7268, var(--red)); }
+  .dome-btn.approve{ background:radial-gradient(circle at 35% 25%, #8fe07d, var(--grn)); }
+  .dome-btn:active{ transform:translateY(6px); }
+  .dome-label{ position:absolute;bottom:-30px;left:0;right:0;text-align:center;
+    font-family:'Arial Black',sans-serif;font-size:15px;color:#0d1b06; text-shadow:0 1px 0 rgba(255,255,255,.4); }
+  .dome-label.ban-label{color:#4a0d0a;}
+
+  /* ================= JUMPSCARE ================= */
+  .jumpscare-overlay{
+    position:fixed; inset:0; z-index:999; display:flex;align-items:center;justify-content:center;
+    background:#000; opacity:0; pointer-events:none;
+  }
+  .jumpscare-overlay.show{ opacity:1; pointer-events:auto; animation:jsFlash .9s steps(2,end) forwards; }
+  @keyframes jsFlash{
+    0%{background:#000;}
+    10%{background:#4a0000;}
+    20%{background:#000;}
+    30%{background:#4a0000;}
+    100%{background:#1a0000;}
+  }
+  .jumpscare-face{
+    width:min(420px,70vw); animation:jsShake .12s linear infinite, jsGrow .9s ease-out forwards;
+  }
+  @keyframes jsShake{
+    0%{transform:translate(0,0) scale(1);} 25%{transform:translate(-6px,4px) scale(1.01);}
+    50%{transform:translate(6px,-4px) scale(.99);} 75%{transform:translate(-4px,-6px) scale(1.02);}
+    100%{transform:translate(0,0) scale(1);}
+  }
+  @keyframes jsGrow{ 0%{transform:scale(.3);} 100%{transform:scale(1);} }
+  .jumpscare-text{
+    position:absolute; bottom:8%; left:0;right:0; text-align:center;
+    font-family:'Arial Black',sans-serif; font-size:clamp(22px,5vw,42px); color:#ff3b30;
+    text-shadow:0 0 20px #ff0000; letter-spacing:2px;
+  }
+
+  /* ================= END ================= */
+  #end-panel{ width:100%;height:100%;
+    background:linear-gradient(180deg,#7a1f18 0%, #a83a1f 40%, #6b8a1f 70%, #2e7d28 100%);
+    display:flex;align-items:center;justify-content:center; }
+  .end-card{ width:min(520px,90vw); background:linear-gradient(180deg,#c0332d,#7a1a16); border-radius:26px;
+    padding:26px 26px 30px; box-shadow:0 18px 0 rgba(0,0,0,.25), 0 24px 40px rgba(0,0,0,.45); text-align:center; }
+  .end-icon{font-size:52px;margin-bottom:4px;}
+  .end-title{ font-family:'Arial Black',sans-serif;font-size:28px;color:#fff2c8;
+    -webkit-text-stroke:1px #4a0d0a;letter-spacing:1px;margin:0 0 6px; }
+  .end-sub{color:#ffe9c8;font-size:13px;margin:0 0 18px;font-family:'Trebuchet MS',sans-serif;}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px;}
+  .stat-box{ background:radial-gradient(circle at 30% 20%, #5fae3f, #2e7d28 70%); border-radius:12px;padding:12px;
+    box-shadow:inset 0 4px 8px rgba(0,0,0,.3); }
+  .stat-box .num{font-size:22px;color:#ffe184;font-weight:900;font-family:'Arial Black',sans-serif;}
+  .stat-box .lbl{font-size:10px;color:#f4fff0;letter-spacing:1px;text-transform:uppercase;margin-top:2px;font-family:'Trebuchet MS',sans-serif;}
+  .end-buttons{display:flex;flex-direction:column;gap:14px;}
+</style>
+</head>
+<body>
+<div id="root">
+
+  <!-- MAIN MENU -->
+  <div id="menu-panel">
+    <div class="menu-inner">
+      <div class="title-row">
+        <h1 class="title">BAN SIMULATOR</h1>
+        <span class="title-2000">2000</span>
+      </div>
+      <div class="menu-body">
+        <div class="menu-buttons-col">
+          <button class="pill-btn" id="btn-play">PLAY</button>
+          <button class="pill-btn" id="btn-howto">SETTINGS &amp; HOW TO PLAY</button>
+          <button class="pill-btn" id="btn-exit">EXIT</button>
+        </div>
+        <div class="avatar-wrap">
+          <svg class="avatar-figure" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
+            <rect x="78" y="220" width="20" height="70" rx="6" fill="#26314a"/>
+            <rect x="104" y="220" width="20" height="70" rx="6" fill="#26314a"/>
+            <rect x="72" y="284" width="34" height="16" rx="4" fill="#7a1f18"/>
+            <rect x="98" y="284" width="34" height="16" rx="4" fill="#7a1f18"/>
+            <rect x="62" y="150" width="78" height="80" rx="14" fill="#161b22"/>
+            <rect x="93" y="150" width="16" height="80" fill="#2f6fb0"/>
+            <rect x="40" y="168" width="70" height="20" rx="10" fill="#eef1f3" transform="rotate(-8 40 168)"/>
+            <rect x="92" y="168" width="70" height="20" rx="10" fill="#eef1f3" transform="rotate(8 92 168)"/>
+            <circle cx="101" cy="108" r="46" fill="#eef1f3" stroke="#161b22" stroke-width="3"/>
+            <path d="M60 96 a41 41 0 0 1 82 0 v-6 a41 20 0 0 0 -82 0 z" fill="#2f6fb0"/>
+            <circle cx="86" cy="112" r="4" fill="#161b22"/>
+            <circle cx="116" cy="112" r="4" fill="#161b22"/>
+            <path d="M84 130 q17 12 34 0" stroke="#161b22" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="menu-footer">KEYBOARD: A = APPROVE&nbsp;&nbsp;&nbsp;D = BAN &nbsp;&nbsp;&nbsp;NO TIME LIMIT — TAKE YOUR TIME</div>
+  </div>
+
+  <!-- HOW TO PLAY -->
+  <div class="hidden" id="howto-panel">
+    <div class="howto-card">
+      <div class="howto-title">HELPY'S TIPS</div>
+      <div class="howto-screen">
+        <p>Reports roll in one at a time. Read each one, then make the call — there's no clock, so take your time.</p>
+        <div class="howto-rule"><span class="tag ban">BAN</span><span style="color:#f4fff0;font-family:'Trebuchet MS',sans-serif;">Genuine rule-breaking: scams, harassment, exploits, doxxing, hate content.</span></div>
+        <div class="howto-rule"><span class="tag ok">OK</span><span style="color:#f4fff0;font-family:'Trebuchet MS',sans-serif;">Harmless or awkward behavior that isn't actually against the rules.</span></div>
+        <p>🙂 <b>Community meter</b> fills if you ban too many innocent players — max it and the server revolts.<br>
+        🧑‍🦳 <b>Steve's meter</b> fills a little every single time you approve (unban) someone, correct or not. Steve is watching from the window and keeping count — max it out and you will not enjoy what happens next.</p>
+        <p>Chain correct calls for combo bonus points!</p>
+      </div>
+      <button class="pill-btn" id="btn-back-menu">GOT IT</button>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div class="hidden" id="game-panel">
+    <div class="sky-bg">
+      <div class="clouds" id="clouds"></div>
+      <div class="window-mullions"></div>
+
+      <!-- lurking figure, fades in as the Watcher meter rises -->
+      <svg class="overseer-lurker" id="overseer-lurker" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="100" cy="205" rx="80" ry="14" fill="rgba(0,0,0,.35)"/>
+        <!-- shoulders / shirt -->
+        <path d="M35 220 C35 165 60 140 100 140 C140 140 165 165 165 220 Z" fill="#1c1c1f"/>
+        <!-- neck -->
+        <rect x="86" y="118" width="28" height="30" fill="#d8ad86"/>
+        <!-- head -->
+        <circle cx="100" cy="88" r="46" fill="#e0b48c"/>
+        <!-- ears -->
+        <circle cx="56" cy="90" r="7" fill="#d8ad86"/>
+        <circle cx="144" cy="90" r="7" fill="#d8ad86"/>
+        <!-- grey hair -->
+        <path d="M54 78 C54 40 78 24 100 24 C122 24 146 40 146 78 C146 60 128 46 100 46 C72 46 54 60 54 78 Z" fill="#9a9a9a"/>
+        <path d="M54 78 C50 66 52 54 60 46 L58 66 Z" fill="#9a9a9a"/>
+        <path d="M146 78 C150 66 148 54 140 46 L142 66 Z" fill="#9a9a9a"/>
+        <!-- glasses -->
+        <rect x="62" y="82" width="34" height="24" rx="6" fill="none" stroke="#26221a" stroke-width="5"/>
+        <rect x="104" y="82" width="34" height="24" rx="6" fill="none" stroke="#26221a" stroke-width="5"/>
+        <line x1="96" y1="92" x2="104" y2="92" stroke="#26221a" stroke-width="5"/>
+        <line x1="62" y1="88" x2="48" y2="84" stroke="#26221a" stroke-width="4"/>
+        <line x1="138" y1="88" x2="152" y2="84" stroke="#26221a" stroke-width="4"/>
+        <!-- eyes -->
+        <circle cx="79" cy="94" r="3" fill="#26221a"/>
+        <circle cx="121" cy="94" r="3" fill="#26221a"/>
+        <!-- neutral mouth -->
+        <path d="M86 116 Q100 122 114 116" stroke="#8a5a3a" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </svg>
+
+      <div class="floor"></div>
+
+      <div class="hud-row">
+        <div class="meter-col">
+          <div class="meter-head community">🙂</div>
+          <div class="meter-name">COMMUNITY</div>
+          <div class="thermo"><div class="thermo-fill community" id="meter-community" style="height:20%"></div></div>
+        </div>
+        <div class="meter-col">
+          <div class="meter-head overseer">🧑‍🦳</div>
+          <div class="meter-name">STEVE</div>
+          <div class="thermo"><div class="thermo-fill overseer" id="meter-overseer" style="height:0%"></div></div>
+        </div>
+      </div>
+
+      <div class="center-hud">
+        <div class="level-badge">LEVEL <span id="level-num">1</span></div>
+        <div class="score-line">SCORE <b id="score-num">0</b> &nbsp;•&nbsp; COMBO <b id="combo-num">0</b></div>
+      </div>
+
+      <div class="case-monitor">
+        <div class="monitor">
+          <div class="monitor-screen">
+            <div class="feedback-flash" id="feedback-flash"></div>
+            <div class="case-user" id="case-user">Loading report…</div>
+            <div class="case-desc" id="case-desc">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- desk avatars: reported player models "walking up" to the desk each round -->
+      <div class="desk-scene" id="desk-scene"></div>
+
+      <div class="buttons-row">
+        <button class="dome-btn approve" id="btn-approve"><span class="dome-label">APPROVE [A]</span></button>
+        <button class="dome-btn ban" id="btn-ban"><span class="dome-label ban-label">BAN [D]</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JUMPSCARE OVERLAY -->
+  <div class="jumpscare-overlay" id="jumpscare-overlay">
+    <svg class="jumpscare-face" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+      <path d="M35 220 C35 165 60 140 100 140 C140 140 165 165 165 220 Z" fill="#1c1c1f"/>
+      <rect x="86" y="118" width="28" height="30" fill="#d8ad86"/>
+      <circle cx="100" cy="86" r="48" fill="#e0b48c"/>
+      <path d="M52 76 C52 36 78 18 100 18 C122 18 148 36 148 76 C148 56 128 42 100 42 C72 42 52 56 52 76 Z" fill="#9a9a9a"/>
+      <rect x="60" y="80" width="36" height="26" rx="6" fill="none" stroke="#050505" stroke-width="6"/>
+      <rect x="104" y="80" width="36" height="26" rx="6" fill="none" stroke="#050505" stroke-width="6"/>
+      <line x1="96" y1="90" x2="104" y2="90" stroke="#050505" stroke-width="6"/>
+      <circle cx="78" cy="93" r="8" fill="#ff2b2b"/>
+      <circle cx="122" cy="93" r="8" fill="#ff2b2b"/>
+      <path d="M70 150 Q100 190 130 150 Q100 175 70 150 Z" fill="#3a0000"/>
+    </svg>
+    <div class="jumpscare-text">STEVE WAS WATCHING THE WHOLE TIME</div>
+  </div>
+
+  <!-- END SCREEN -->
+  <div class="hidden" id="end-panel">
+    <div class="end-card">
+      <div class="end-icon" id="end-icon">💥</div>
+      <h1 class="end-title" id="end-title">SERVER REVOLT</h1>
+      <p class="end-sub" id="end-sub">The community has had enough of your reign of terror.</p>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="num" id="final-score">0</div><div class="lbl">Final Score</div></div>
+        <div class="stat-box"><div class="num" id="final-level">1</div><div class="lbl">Level Reached</div></div>
+        <div class="stat-box"><div class="num" id="final-cases">0</div><div class="lbl">Cases Judged</div></div>
+        <div class="stat-box"><div class="num" id="final-best-combo">0</div><div class="lbl">Best Combo</div></div>
+      </div>
+      <div class="end-buttons">
+        <button class="pill-btn" id="btn-retry" style="padding:16px;font-size:20px;">PLAY AGAIN</button>
+        <button class="pill-btn" id="btn-to-menu" style="padding:11px;font-size:15px;">MAIN MENU</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var USERNAMES = [
+    "xX_Builder22_Xx","CoolKid2007","NoobMaster69","PixelPenny","GlitchGoblin",
+    "SkyBlockSteve","DiamondDaisy","TacoTycoonTed","RustyRobloxian","ChaosChicken77",
+    "MegaMallMax","BlockyBrenda","QuietQuinnn","ZoomZoomZane","WaffleWendy",
+    "ObbyOllie","TradeKingTravis","LoreLinda_23","ShinyShrimp","CraftyCarl99",
+    "SprinkleSara","BuilderBob_Jr","VelvetViper","GrumpyGiraffe","EchoEli2011"
+  ];
+
+  var VIOLATIONS = [
+    "Posted their real phone number in public chat asking people to call them.",
+    "Ran a fake 'free Robux generator' link in the game chat.",
+    "Spammed the same join-request message 40 times in two minutes.",
+    "Used an aim-assist exploit to dominate a fair PvP round.",
+    "Impersonated a Roblox staff member to trick players into handing over passwords.",
+    "Shared another player's home address after an argument.",
+    "Sold fake 'admin commands' to younger players for real money.",
+    "Ran an unlicensed item-gambling site targeting kids' accounts.",
+    "Used a duplication glitch to flood the market with fake limited items.",
+    "Harassed a new player non-stop for over an hour after they lost a round.",
+    "Uploaded a shirt design hiding a slur inside the pattern.",
+    "Repeatedly asked a 10-year-old player for personal photos.",
+    "Doxxed a streamer's school in a public server description.",
+    "Set up a catfish account pretending to be a Roblox employee giving away prizes.",
+    "Used a script exploit to teleport into other players' private servers uninvited."
+  ];
+
+  var FINE = [
+    "Built a slightly wonky pixel-art house with the windows upside down.",
+    "Wore a mismatched hat and pants combo that clashes horribly.",
+    "Typed 'gg' in all caps after losing a round.",
+    "Has the word 'Noob' in their username.",
+    "Asked in general chat how trading actually works.",
+    "AFK-farmed coins in a tycoon game for three hours straight.",
+    "Threw a virtual birthday party in a hangout game.",
+    "Politely reported a minor bug in the shop UI.",
+    "Is still wearing last season's event item, unironically.",
+    "Hummed the Roblox 'oof' sound effect on voice chat.",
+    "Built a chaotic rollercoaster with zero safety rails, purely for laughs.",
+    "Changed their avatar into a giant chicken for the weekend.",
+    "Asked for tips on how to build faster in the forums.",
+    "Left a group chat without saying goodbye to anyone.",
+    "Used way too many exclamation points in every single message!!!",
+    "Named their pet dog in-game 'Sir Waffles the Bold'.",
+    "Got lost in an obby for twenty minutes and asked chat for directions."
+  ];
+
+  // color palettes so each "3D model" at the desk looks a little different
+  var HAIR_COLORS = ["#6b3f1d","#1a1a1a","#c62828","#f4d35e","#8f7bff","#2f6fb0"];
+  var SHIRT_COLORS = ["#2f6fb0","#c62828","#4caf3f","#8f7bff","#e6a13a","#1a1a1a"];
+
+  var state = {
+    score:0, combo:0, bestCombo:0, level:1, casesJudged:0,
+    community:20, overseer:0,
+    current:null, roundActive:false
+  };
+
+  var $ = function(id){ return document.getElementById(id); };
+  var menuPanel = $("menu-panel"), howtoPanel = $("howto-panel"),
+      gamePanel = $("game-panel"), endPanel = $("end-panel"),
+      jumpscareOverlay = $("jumpscare-overlay");
+
+  function showOnly(panel){
+    [menuPanel, howtoPanel, gamePanel, endPanel].forEach(function(p){ p.classList.add("hidden"); });
+    panel.classList.remove("hidden");
+  }
+
+  function spawnClouds(){
+    var wrap = $("clouds");
+    if(!wrap || wrap.children.length) return;
+    var specs = [
+      {t:'10%',l:'6%',w:90,h:34},{t:'22%',l:'28%',w:120,h:40},
+      {t:'8%',l:'55%',w:80,h:28},{t:'28%',l:'72%',w:110,h:36},
+      {t:'14%',l:'86%',w:70,h:24}
+    ];
+    specs.forEach(function(s){
+      var d = document.createElement('div');
+      d.className = 'cloud';
+      d.style.top = s.t; d.style.left = s.l; d.style.width = s.w+'px'; d.style.height = s.h+'px';
+      wrap.appendChild(d);
+    });
+  }
+
+  var actx = null;
+  function beep(freq, dur, type){
+    try{
+      if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+      var o = actx.createOscillator(), g = actx.createGain();
+      o.type = type || "square"; o.frequency.value = freq; g.gain.value = 0.06;
+      o.connect(g); g.connect(actx.destination); o.start();
+      g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + dur);
+      o.stop(actx.currentTime + dur);
+    }catch(e){}
+  }
+  function jumpscareSound(){
+    try{
+      if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+      var o = actx.createOscillator(), g = actx.createGain();
+      o.type = "sawtooth"; o.frequency.setValueAtTime(60, actx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(900, actx.currentTime + 0.35);
+      g.gain.value = 0.18;
+      o.connect(g); g.connect(actx.destination); o.start();
+      g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + 0.9);
+      o.stop(actx.currentTime + 0.9);
+    }catch(e){}
+  }
+
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+
+  function newCase(){
+    var isViolation = Math.random() < 0.5;
+    var desc = isViolation ? pick(VIOLATIONS) : pick(FINE);
+    return { user: pick(USERNAMES), desc: desc, verdict: isViolation ? "ban" : "approve" };
+  }
+
+  function updateHud(){
+    $("score-num").textContent = state.score;
+    $("combo-num").textContent = state.combo;
+    $("level-num").textContent = state.level;
+    $("meter-community").style.height = state.community + "%";
+    $("meter-overseer").style.height = state.overseer + "%";
+    var lurker = $("overseer-lurker");
+    lurker.style.opacity = (state.overseer/100 * 0.9).toFixed(2);
+    lurker.style.transform = "translateX(-50%) translateY(" + (20 - state.overseer*0.18) + "px) scale(" + (0.85 + state.overseer/100*0.4) + ")";
+  }
+
+  function renderCase(){
+    $("case-user").textContent = state.current.user;
+    $("case-desc").textContent = state.current.desc;
+  }
+
+  function buildDeskAvatar(mirror){
+    var hair = pick(HAIR_COLORS), shirt = pick(SHIRT_COLORS);
+    var wrap = document.createElement("div");
+    wrap.className = "desk-avatar" + (mirror ? " mirror" : "");
+    wrap.innerHTML =
+      '<svg viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">' +
+      '<rect x="78" y="220" width="20" height="70" rx="6" fill="#26314a"/>' +
+      '<rect x="104" y="220" width="20" height="70" rx="6" fill="#26314a"/>' +
+      '<rect x="62" y="150" width="78" height="80" rx="14" fill="' + shirt + '"/>' +
+      '<rect x="40" y="168" width="70" height="20" rx="10" fill="#eef1f3" transform="rotate(-8 40 168)"/>' +
+      '<rect x="92" y="168" width="70" height="20" rx="10" fill="#eef1f3" transform="rotate(8 92 168)"/>' +
+      '<circle cx="101" cy="108" r="46" fill="#eef1f3" stroke="#161b22" stroke-width="3"/>' +
+      '<path d="M58 100 q43 -46 86 0 q0 -34 -43 -34 q-43 0 -43 34 z" fill="' + hair + '"/>' +
+      '<circle cx="86" cy="112" r="4" fill="#161b22"/>' +
+      '<circle cx="116" cy="112" r="4" fill="#161b22"/>' +
+      '<path d="M84 130 q17 12 34 0" stroke="#161b22" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+      '</svg>';
+    return wrap;
+  }
+
+  function showDeskAvatar(){
+    var scene = $("desk-scene");
+    scene.innerHTML = "";
+    var avatar = buildDeskAvatar(Math.random() < 0.5);
+    scene.appendChild(avatar);
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ avatar.classList.add("in"); });
+    });
+  }
+
+  function hideDeskAvatar(){
+    var scene = $("desk-scene");
+    var avatar = scene.querySelector(".desk-avatar");
+    if(avatar) avatar.classList.remove("in");
+  }
+
+  function flashFeedback(correct){
+    var el = $("feedback-flash");
+    el.className = "feedback-flash show " + (correct ? "correct" : "wrong");
+    el.textContent = correct ? "CORRECT!" : "OOPS!";
+    setTimeout(function(){ el.className = "feedback-flash"; }, 550);
+  }
+
+  function handleVerdict(choice){
+    if(!state.roundActive) return;
+    state.roundActive = false;
+
+    var correct = choice === state.current.verdict;
+    state.casesJudged++;
+    hideDeskAvatar();
+
+    if(correct){
+      state.combo++;
+      state.bestCombo = Math.max(state.bestCombo, state.combo);
+      state.score += 10 + state.combo*2;
+      beep(880, 0.12, "sine");
+      flashFeedback(true);
+    } else {
+      state.combo = 0;
+      beep(140, 0.25, "sawtooth");
+      flashFeedback(false);
+    }
+
+    // every approval (unban) feeds the Watcher, correct or not
+    if(choice === "approve"){
+      state.overseer = clamp(state.overseer + 14, 0, 100);
+    }
+    // wrongly banning an innocent player angers the community
+    if(!correct && state.current.verdict === "approve"){
+      state.community = clamp(state.community + 18, 0, 100);
+    } else if(correct){
+      state.community = clamp(state.community - 1, 0, 100);
+    }
+
+    if(state.casesJudged % 5 === 0){ state.level++; }
+
+    updateHud();
+
+    if(state.overseer >= 100){
+      setTimeout(triggerJumpscare, 400);
+      return;
+    }
+    if(state.community >= 100){
+      setTimeout(function(){ endGame("community"); }, 500);
+      return;
+    }
+
+    setTimeout(nextRound, 550);
+  }
+
+  function nextRound(){
+    state.current = newCase();
+    renderCase();
+    showDeskAvatar();
+    state.roundActive = true;
+  }
+
+  function triggerJumpscare(){
+    jumpscareSound();
+    jumpscareOverlay.classList.add("show");
+    setTimeout(function(){
+      jumpscareOverlay.classList.remove("show");
+      endGame("overseer");
+    }, 1100);
+  }
+
+  function startGame(){
+    state.score = 0; state.combo = 0; state.bestCombo = 0; state.level = 1;
+    state.casesJudged = 0; state.community = 20; state.overseer = 0;
+    updateHud();
+    showOnly(gamePanel);
+    spawnClouds();
+    nextRound();
+  }
+
+  function endGame(cause){
+    state.roundActive = false;
+    var icon, title, sub;
+    if(cause === "community"){
+      icon = "🔥"; title = "SERVER REVOLT";
+      sub = "You banned too many innocent players. The community has stormed the booth.";
+    } else if(cause === "overseer"){
+      icon = "🧑‍🦳"; title = "STEVE SAW EVERYTHING";
+      sub = "You unbanned one too many people. Steve was counting every single one.";
+    } else {
+      icon = "🛑"; title = "SHIFT OVER";
+      sub = "That's a wrap for this shift.";
+    }
+    $("end-icon").textContent = icon;
+    $("end-title").textContent = title;
+    $("end-sub").textContent = sub;
+    $("final-score").textContent = state.score;
+    $("final-level").textContent = state.level;
+    $("final-cases").textContent = state.casesJudged;
+    $("final-best-combo").textContent = state.bestCombo;
+    showOnly(endPanel);
+  }
+
+  $("btn-play").addEventListener("click", startGame);
+  $("btn-howto").addEventListener("click", function(){ showOnly(howtoPanel); });
+  $("btn-back-menu").addEventListener("click", function(){ showOnly(menuPanel); });
+  $("btn-exit").addEventListener("click", function(){
+    menuPanel.innerHTML = '<h1 class="title" style="font-size:28px;text-align:center;width:100%;">Thanks for playing!</h1>' +
+      '<p style="text-align:center;color:#0d1b06;font-family:\'Trebuchet MS\',sans-serif;">You may now close this tab.</p>';
+  });
+  $("btn-approve").addEventListener("click", function(){ handleVerdict("approve"); });
+  $("btn-ban").addEventListener("click", function(){ handleVerdict("ban"); });
+  $("btn-retry").addEventListener("click", startGame);
+  $("btn-to-menu").addEventListener("click", function(){ showOnly(menuPanel); });
+
+  document.addEventListener("keydown", function(e){
+    if(!state.roundActive) return;
+    var k = e.key.toLowerCase();
+    if(k === "a") handleVerdict("approve");
+    if(k === "d") handleVerdict("ban");
+  });
+
+  showOnly(menuPanel);
+})();
+</script>
+</body>
+</html>
