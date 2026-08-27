@@ -107,7 +107,7 @@
   }
 
   /* lurking figure behind the window, grows more visible as the Watcher meter rises */
-  .steve-walker{
+  .David-walker{
     position:absolute; bottom:20%; left:50%;
     width:150px; height:300px;
     transform:translate(-50%,0) translateX(-65vw) scale(0.85);
@@ -115,10 +115,10 @@
   }
   .overseer-lurker{
     width:100%; height:100%; display:block;
-    animation:steveBob 0.6s ease-in-out infinite;
+    animation:DavidBob 0.6s ease-in-out infinite;
     transform-origin:bottom center;
   }
-  @keyframes steveBob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-4px);} }
+  @keyframes DavidBob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-4px);} }
 
   .hud-row{
     position:absolute;top:14px;left:0;right:0; display:flex;justify-content:space-between;align-items:flex-start;
@@ -384,9 +384,9 @@
         <p>Reports roll in one at a time. Read each one, then make the call — there's no clock, so take your time.</p>
         <div class="howto-rule"><span class="tag ban">BAN</span><span style="color:#f4fff0;font-family:'Trebuchet MS',sans-serif;">Total nonsense that still trips the filter — greetings, birthdays, harmless slang. It's silly, but that's the rule.</span></div>
         <div class="howto-rule"><span class="tag ok">OK</span><span style="color:#f4fff0;font-family:'Trebuchet MS',sans-serif;">Genuinely normal player behavior. Let it be.</span></div>
-        <p><b>⚠ Keep an eye out for Steve.</b> He wanders in and out of the room. You can always hit APPROVE, on-screen or not — but if he's around to see it, he takes it personally.</p>
+        <p><b>⚠ Keep an eye out for David.</b> He wanders in and out of the room. You can always hit APPROVE, on-screen or not — but if he's around to see it, he takes it personally.</p>
         <p>🙂 <b>Community meter</b> fills if you ban a genuinely innocent player — max it and the server revolts.<br>
-        🧑‍🦳 <b>Steve's meter</b> only rises when he personally sees you hit APPROVE. Unban away when he's out of the room — it's free. Max him out and you will not enjoy what happens next.</p>
+        🧑‍🦳 <b>David's meter</b> only rises when he personally sees you hit APPROVE. Unban away when he's out of the room — it's free. Max him out and you will not enjoy what happens next.</p>
         <p>Chain correct calls for combo bonus points!</p>
       </div>
       <button class="pill-btn" id="btn-back-menu">GOT IT</button>
@@ -400,8 +400,8 @@
       <div class="window-mullions"></div>
 
       <!-- lurking figure, fades in as the Watcher meter rises -->
-      <!-- Steve: walks fully on/off screen, clipped by the office walls -->
-      <div class="steve-walker" id="steve-walker">
+      <!-- David: walks fully on/off screen, clipped by the office walls -->
+      <div class="David-walker" id="David-walker">
       <svg class="overseer-lurker" id="overseer-lurker" viewBox="0 0 140 300" xmlns="http://www.w3.org/2000/svg">
         <ellipse cx="70" cy="292" rx="46" ry="8" fill="rgba(0,0,0,.35)"/>
         <!-- legs -->
@@ -451,7 +451,7 @@
         </div>
         <div class="meter-col">
           <div class="meter-head overseer">🧑‍🦳</div>
-          <div class="meter-name">STEVE</div>
+          <div class="meter-name">David</div>
           <div class="thermo"><div class="thermo-fill overseer" id="meter-overseer" style="height:0%"></div></div>
         </div>
       </div>
@@ -503,7 +503,7 @@
       <circle cx="122" cy="93" r="8" fill="#ff2b2b"/>
       <path d="M70 150 Q100 190 130 150 Q100 175 70 150 Z" fill="#3a0000"/>
     </svg>
-    <div class="jumpscare-text">STEVE WAS WATCHING THE WHOLE TIME</div>
+    <div class="jumpscare-text">David WAS WATCHING THE WHOLE TIME</div>
   </div>
 
   <!-- END SCREEN -->
@@ -533,7 +533,7 @@
 
   var USERNAMES = [
     "xX_Builder22_Xx","CoolKid2007","NoobMaster69","PixelPenny","GlitchGoblin",
-    "SkyBlockSteve","DiamondDaisy","TacoTycoonTed","RustyRobloxian","ChaosChicken77",
+    "SkyBlockDavid","DiamondDaisy","TacoTycoonTed","RustyRobloxian","ChaosChicken77",
     "MegaMallMax","BlockyBrenda","QuietQuinnn","ZoomZoomZane","WaffleWendy",
     "ObbyOllie","TradeKingTravis","LoreLinda_23","ShinyShrimp","CraftyCarl99",
     "SprinkleSara","BuilderBob_Jr","VelvetViper","GrumpyGiraffe","EchoEli2011"
@@ -612,7 +612,7 @@
     score:0, combo:0, bestCombo:0, level:1, casesJudged:0,
     community:20, overseer:0,
     current:null, roundActive:false,
-    steveOnScreen:false, roamTimer:null, enterTimer:null, exitTimer:null,
+    DavidOnScreen:false, roamTimer:null, enterTimer:null, exitTimer:null,
     paperSeen:false
   };
 
@@ -773,20 +773,20 @@
     if(avatar) avatar.classList.remove("in");
   }
 
-  function setSteveOnScreen(value){
-    state.steveOnScreen = value;
+  function setDavidOnScreen(value){
+    state.DavidOnScreen = value;
   }
 
-  var STEVE_OFF_SCREEN = 65;   // vw offset — well past either edge, clipped by overflow:hidden
-  var STEVE_ON_SCREEN_BOUND = 38; // vw offset — inside this range counts as "visible"
+  var David_OFF_SCREEN = 65;   // vw offset — well past either edge, clipped by overflow:hidden
+  var David_ON_SCREEN_BOUND = 38; // vw offset — inside this range counts as "visible"
 
-  function steveRoamCycle(){
-    var walker = $("steve-walker");
+  function DavidRoamCycle(){
+    var walker = $("David-walker");
     if(!walker) return;
 
     var leftToRight = Math.random() < 0.5;
-    var startX = leftToRight ? -STEVE_OFF_SCREEN : STEVE_OFF_SCREEN;
-    var endX = leftToRight ? STEVE_OFF_SCREEN : -STEVE_OFF_SCREEN;
+    var startX = leftToRight ? -David_OFF_SCREEN : David_OFF_SCREEN;
+    var endX = leftToRight ? David_OFF_SCREEN : -David_OFF_SCREEN;
     var scale = 0.85 + (state.overseer/100)*0.3;
     var walkDuration = 5000 + Math.random()*2500;
 
@@ -800,33 +800,33 @@
       walker.style.transform = "translate(-50%,0) translateX(" + endX + "vw) scale(" + scale.toFixed(2) + ")";
     });
 
-    var totalDist = STEVE_OFF_SCREEN * 2;
-    var enterFrac = (STEVE_OFF_SCREEN - STEVE_ON_SCREEN_BOUND) / totalDist;
-    var exitFrac = (STEVE_OFF_SCREEN + STEVE_ON_SCREEN_BOUND) / totalDist;
+    var totalDist = David_OFF_SCREEN * 2;
+    var enterFrac = (David_OFF_SCREEN - David_ON_SCREEN_BOUND) / totalDist;
+    var exitFrac = (David_OFF_SCREEN + David_ON_SCREEN_BOUND) / totalDist;
 
     clearTimeout(state.enterTimer);
     clearTimeout(state.exitTimer);
-    state.enterTimer = setTimeout(function(){ setSteveOnScreen(true); }, walkDuration * enterFrac);
-    state.exitTimer = setTimeout(function(){ setSteveOnScreen(false); }, walkDuration * exitFrac);
+    state.enterTimer = setTimeout(function(){ setDavidOnScreen(true); }, walkDuration * enterFrac);
+    state.exitTimer = setTimeout(function(){ setDavidOnScreen(false); }, walkDuration * exitFrac);
 
     var hiddenFor = 1200 + Math.random()*2000;
-    state.roamTimer = setTimeout(steveRoamCycle, walkDuration + hiddenFor);
+    state.roamTimer = setTimeout(DavidRoamCycle, walkDuration + hiddenFor);
   }
 
-  function startSteveRoam(){
-    stopSteveRoam();
-    state.roamTimer = setTimeout(steveRoamCycle, 600);
+  function startDavidRoam(){
+    stopDavidRoam();
+    state.roamTimer = setTimeout(DavidRoamCycle, 600);
   }
 
-  function stopSteveRoam(){
+  function stopDavidRoam(){
     clearTimeout(state.roamTimer);
     clearTimeout(state.enterTimer);
     clearTimeout(state.exitTimer);
-    setSteveOnScreen(false);
-    var walker = $("steve-walker");
+    setDavidOnScreen(false);
+    var walker = $("David-walker");
     if(walker){
       walker.style.transition = "none";
-      walker.style.transform = "translate(-50%,0) translateX(-" + STEVE_OFF_SCREEN + "vw) scale(0.85)";
+      walker.style.transform = "translate(-50%,0) translateX(-" + David_OFF_SCREEN + "vw) scale(0.85)";
     }
   }
 
@@ -859,8 +859,8 @@
       flashFeedback(false);
     }
 
-    // Steve only gets angrier when he personally sees you unban someone
-    if(choice === "approve" && state.steveOnScreen){
+    // David only gets angrier when he personally sees you unban someone
+    if(choice === "approve" && state.DavidOnScreen){
       state.overseer = clamp(state.overseer + 14, 0, 100);
     }
     // wrongly banning a genuinely innocent player angers the community
@@ -897,7 +897,7 @@
   }
 
   function triggerJumpscare(){
-    stopSteveRoam();
+    stopDavidRoam();
     jumpscareSound();
     jumpscareOverlay.classList.add("show");
     setTimeout(function(){
@@ -912,20 +912,20 @@
     updateHud();
     showOnly(gamePanel);
     spawnClouds();
-    startSteveRoam();
+    startDavidRoam();
     nextRound();
   }
 
   function endGame(cause){
     state.roundActive = false;
-    stopSteveRoam();
+    stopDavidRoam();
     var icon, title, sub;
     if(cause === "community"){
       icon = "🔥"; title = "SERVER REVOLT";
       sub = "You banned too many innocent players. The community has stormed the booth.";
     } else if(cause === "overseer"){
-      icon = "🧑‍🦳"; title = "STEVE SAW EVERYTHING";
-      sub = "You unbanned one too many people. Steve was counting every single one.";
+      icon = "🧑‍🦳"; title = "David SAW EVERYTHING";
+      sub = "You unbanned one too many people. David was counting every single one.";
     } else {
       icon = "🛑"; title = "SHIFT OVER";
       sub = "That's a wrap for this shift.";
