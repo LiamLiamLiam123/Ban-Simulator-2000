@@ -786,8 +786,44 @@
 
     var leftToRight = Math.random() < 0.5;
     var startX = leftToRight ? -David_OFF_SCREEN : David_OFF_SCREEN;
-    var endX = leftToRight ? David_OFF_SCREEN : -David_OFF_SCREEN;
     var scale = 0.85 + (state.overseer/100)*0.3;
+
+    // 20% of the time, David walks in and just stands there for 30 seconds
+    if(Math.random() < 0.2){
+      var stopX = (Math.random()*2 - 1) * (David_ON_SCREEN_BOUND * 0.6);
+      var walkInDuration = 2200 + Math.random()*1200;
+
+      walker.style.transition = "none";
+      walker.style.transform = "translate(-50%,0) translateX(" + startX + "vw) scale(" + scale.toFixed(2) + ")";
+      walker.getBoundingClientRect();
+      walker.style.transition = "transform " + walkInDuration + "ms linear";
+      requestAnimationFrame(function(){
+        walker.style.transform = "translate(-50%,0) translateX(" + stopX.toFixed(1) + "vw) scale(" + scale.toFixed(2) + ")";
+      });
+
+      clearTimeout(state.enterTimer);
+      clearTimeout(state.exitTimer);
+      state.enterTimer = setTimeout(function(){ setDavidOnScreen(true); }, walkInDuration * 0.6);
+
+      var standStillFor = 30000;
+      state.roamTimer = setTimeout(function(){
+        var endX = leftToRight ? David_OFF_SCREEN : -David_OFF_SCREEN;
+        var walkOutDuration = 3000 + Math.random()*1500;
+        walker.style.transition = "transform " + walkOutDuration + "ms linear";
+        walker.style.transform = "translate(-50%,0) translateX(" + endX + "vw) scale(" + scale.toFixed(2) + ")";
+
+        clearTimeout(state.exitTimer);
+        state.exitTimer = setTimeout(function(){ setDavidOnScreen(false); }, walkOutDuration * 0.35);
+
+        var hiddenFor = 1200 + Math.random()*2000;
+        state.roamTimer = setTimeout(DavidRoamCycle, walkOutDuration + hiddenFor);
+      }, walkInDuration + standStillFor);
+
+      return;
+    }
+
+    // normal case: walk fully across and off the opposite side
+    var endX = leftToRight ? David_OFF_SCREEN : -David_OFF_SCREEN;
     var walkDuration = 5000 + Math.random()*2500;
 
     // snap instantly to the starting off-screen position, no transition
