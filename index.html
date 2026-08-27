@@ -26,34 +26,47 @@
   #menu-panel{
     width:100%;height:100%;
     background:linear-gradient(180deg,#2e7d28 0%, #6b8a1f 35%, #a83a1f 65%, #7a1f18 100%);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;
+    position:relative;overflow:hidden;
   }
-  .menu-inner{ width:min(1000px,94vw); display:flex;flex-direction:column; position:relative;z-index:2; }
-  .title-row{ display:flex;align-items:flex-end;justify-content:center;gap:14px;margin-bottom:44px;flex-wrap:wrap; }
+  .menu-title{
+    position:absolute; top:6%; left:5%; z-index:2;
+    display:flex; align-items:flex-start; gap:10px; flex-wrap:wrap; max-width:78%;
+  }
   h1.title{
-    font-size:clamp(30px,6.2vw,64px); color:#0a0a0a; -webkit-text-stroke:1.5px #050505;
+    font-size:clamp(26px,5.4vw,54px); color:#0a0a0a; -webkit-text-stroke:1.5px #050505;
     margin:0;letter-spacing:1px;text-shadow:3px 3px 0 rgba(0,0,0,.25); transform:skewX(-2deg);
+    line-height:1;
   }
   .title-2000{
-    font-size:clamp(30px,6.2vw,64px); color:#c62828;
-    text-shadow:4px 4px 0 #6e0f0c, -1px -1px 0 #ff8a80; letter-spacing:1px; transform:skewX(-2deg);
+    font-size:clamp(30px,6.4vw,62px); color:#c62828;
+    text-shadow:4px 4px 0 #6e0f0c, -1px -1px 0 #ff8a80; letter-spacing:1px;
+    transform:skewX(-2deg) translateY(-6px); line-height:1;
   }
-  .menu-body{ display:flex;align-items:center;justify-content:space-between;gap:20px; }
-  .menu-buttons-col{ display:flex;flex-direction:column;gap:26px;align-items:flex-start; }
+  .menu-buttons-col{
+    position:absolute; left:6%; top:40%; z-index:2;
+    display:flex;flex-direction:column;gap:22px;align-items:flex-start;
+  }
   .pill-btn{
-    font-family:'Arial Black',sans-serif; font-weight:900; cursor:pointer;border:none;border-radius:40px;
+    font-family:'Arial Black',sans-serif; font-weight:900; cursor:pointer;border:none;border-radius:44px;
     color:#0d1b06; background:linear-gradient(180deg,#8fe07d 0%, var(--grn) 55%, var(--grn-dark) 100%);
     box-shadow:0 6px 0 #1f5a1a, 0 10px 18px rgba(0,0,0,.35), inset 0 3px 4px rgba(255,255,255,.4);
     transition:transform .07s ease;
   }
   .pill-btn:active{transform:translateY(5px);box-shadow:0 1px 0 #1f5a1a;}
-  #btn-play{ font-size:clamp(30px,3.6vw,44px); padding:20px 70px; border:6px solid var(--red);
+  #btn-play{ font-size:clamp(28px,3.6vw,42px); padding:18px 64px; border:7px solid var(--red);
     box-shadow:0 7px 0 #1f5a1a, 0 0 0 3px rgba(0,0,0,.15), 0 14px 22px rgba(0,0,0,.4); }
-  #btn-howto{ font-size:clamp(18px,2vw,26px); padding:12px 38px; }
-  #btn-exit{ font-size:clamp(15px,1.7vw,20px); padding:9px 30px; }
-  .avatar-wrap{ flex:0 0 auto; display:flex; justify-content:center; }
-  .avatar-figure{ width:190px; }
-  .menu-footer{ margin-top:38px;text-align:center;color:rgba(0,0,0,.55); font-size:11px;letter-spacing:1px;font-family:'Courier New',monospace;font-weight:400; }
+  #btn-howto{ font-size:clamp(16px,1.9vw,22px); padding:11px 34px; margin-left:4px; }
+  #btn-exit{ font-size:clamp(14px,1.5vw,17px); padding:8px 26px; margin-top:46px; }
+  .avatar-wrap{
+    position:absolute; right:4%; bottom:0; z-index:1;
+    display:flex; justify-content:center;
+  }
+  .avatar-figure{ width:min(260px,26vw); }
+  .menu-footer{
+    position:absolute; bottom:14px; left:0; right:0;
+    text-align:center;color:rgba(0,0,0,.5); font-size:11px;letter-spacing:1px;
+    font-family:'Courier New',monospace;font-weight:400; z-index:2;
+  }
 
   /* ================= HOWTO ================= */
   #howto-panel{ width:100%;height:100%; background:linear-gradient(180deg,#2e7d28 0%, #6b8a1f 50%, #a83a1f 100%);
@@ -94,11 +107,18 @@
   }
 
   /* lurking figure behind the window, grows more visible as the Watcher meter rises */
-  .overseer-lurker{
-    position:absolute; top:2%; left:50%; transform:translateX(-50%);
-    width:260px; height:260px; opacity:0; transition:opacity .4s ease, transform .4s ease;
-    filter:drop-shadow(0 10px 20px rgba(0,0,0,.5)); pointer-events:none; z-index:1;
+  .David-walker{
+    position:absolute; bottom:20%; left:50%;
+    width:150px; height:300px;
+    transform:translate(-50%,0) translateX(-65vw) scale(0.85);
+    filter:drop-shadow(0 10px 14px rgba(0,0,0,.5)); pointer-events:none; z-index:2;
   }
+  .overseer-lurker{
+    width:100%; height:100%; display:block;
+    animation:DavidBob 0.6s ease-in-out infinite;
+    transform-origin:bottom center;
+  }
+  @keyframes DavidBob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-4px);} }
 
   .hud-row{
     position:absolute;top:14px;left:0;right:0; display:flex;justify-content:space-between;align-items:flex-start;
@@ -124,8 +144,8 @@
     padding:3px 10px;border-radius:8px; }
 
   .desk-scene{
-    position:absolute; bottom:14%; left:50%; transform:translateX(-50%);
-    z-index:4; width:min(700px,92vw); display:flex; align-items:flex-end; justify-content:center;
+    position:absolute; bottom:18%; left:50%; transform:translateX(-50%);
+    z-index:3; width:min(700px,92vw); display:flex; align-items:flex-end; justify-content:center;
     perspective:900px;
   }
   .desk-avatar{
@@ -136,13 +156,70 @@
   .desk-avatar.mirror{ transform:translateY(40px) rotateY(-18deg) scale(.85); }
   .desk-avatar.mirror.in{ transform:translateY(0) rotateY(-18deg) scale(1); }
 
-  .case-monitor{ position:absolute;top:126px;left:50%;transform:translateX(-50%); z-index:6; width:min(560px,88vw); }
-  .monitor{ background:linear-gradient(180deg,#c0332d,#7a1a16); border-radius:26px; padding:14px 18px 20px;
-    box-shadow:0 18px 0 rgba(0,0,0,.25), 0 24px 40px rgba(0,0,0,.45); }
-  .monitor-screen{ background:radial-gradient(circle at 30% 20%, #5fae3f, #2e7d28 70%); border-radius:14px;
-    padding:18px 18px 16px; position:relative; box-shadow:inset 0 6px 14px rgba(0,0,0,.3); }
-  .case-user{ color:#ffe184;font-weight:900;font-family:'Trebuchet MS',sans-serif;font-size:18px;margin-bottom:4px;}
-  .case-desc{ color:#f4fff0;font-family:'Trebuchet MS',sans-serif;font-weight:600;font-size:15px;line-height:1.4;}
+  .case-monitor{ display:none; }
+
+  .paper-btn{
+    width:min(96px,15vw); height:min(120px,18vw);
+    background:#fdfbf3;
+    border:3px solid #c9c2a8;
+    border-radius:6px;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-size:34px;
+    box-shadow:0 8px 0 rgba(0,0,0,.25), 0 12px 18px rgba(0,0,0,.35);
+    transition:transform .08s ease;
+    position:relative;
+  }
+  .paper-btn::before{
+    content:"";position:absolute;top:10px;left:10px;right:10px;bottom:10px;
+    background:repeating-linear-gradient(0deg, #ddd6bd 0px, #ddd6bd 2px, transparent 2px, transparent 10px);
+    opacity:.6;
+  }
+  .paper-btn:active{ transform:translateY(4px); }
+  .paper-btn.disabled{ opacity:.5; filter:grayscale(50%); cursor:default; }
+
+  .paper-overlay{
+    position:fixed; inset:0; z-index:50;
+    opacity:0; pointer-events:none;
+    transition:opacity .25s ease;
+  }
+  .paper-overlay.show{ opacity:1; pointer-events:auto; }
+  .paper-sheet{
+    position:absolute; inset:0; width:100%; height:100%;
+    background:#f6f0dd;
+    background-image:repeating-linear-gradient(0deg, rgba(0,0,0,.03) 0px, rgba(0,0,0,.03) 1px, transparent 1px, transparent 34px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:60px 8vw;
+    box-shadow:0 0 80px rgba(0,0,0,.5) inset;
+    transform:scale(.06);
+    transition:transform .42s cubic-bezier(.19,1.05,.32,1.02);
+  }
+  .paper-overlay.show .paper-sheet{ transform:scale(1); }
+  .paper-kicker{
+    font-family:'Courier New',monospace; font-size:13px; letter-spacing:3px;
+    color:#8a7a55; text-transform:uppercase; margin:0 0 24px;
+  }
+  .paper-user{
+    font-family:'Trebuchet MS',sans-serif; font-weight:900; font-size:clamp(22px,4vw,34px);
+    color:#1a1a1a; margin:0 0 18px;
+  }
+  .paper-desc{
+    font-family:'Trebuchet MS',sans-serif; font-size:clamp(16px,2.4vw,24px); line-height:1.75;
+    color:#2a2a2a; max-width:760px;
+  }
+  .paper-flag{
+    margin-top:22px; font-family:'Courier New',monospace; font-size:13px; letter-spacing:1px;
+    color:#7a1f18; background:#f2c2b8; border:2px dashed #c0332d; border-radius:6px;
+    padding:8px 16px; display:inline-block;
+  }
+  .paper-ok{
+    position:absolute; bottom:6%; right:6%;
+    background:radial-gradient(circle at 35% 30%,#e2564d,var(--red-dark));
+    color:#fff;font-weight:900;border:none;border-radius:50%;
+    width:70px;height:70px;font-size:15px;cursor:pointer;
+    box-shadow:0 6px 0 #4a0d0a, 0 10px 18px rgba(0,0,0,.4);
+  }
+  .paper-ok:active{ transform:translateY(3px); box-shadow:0 3px 0 #4a0d0a; }
 
   .feedback-flash{
     position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
@@ -159,8 +236,23 @@
   .feedback-flash.correct{color:#4caf3f;}
   .feedback-flash.wrong{color:#d32f2b;}
 
+  .desk{
+    position:absolute; left:0; right:0; bottom:0; height:20%;
+    background:linear-gradient(180deg,#ffffff 0%, #f0f0f0 55%, #dcdcdc 100%);
+    box-shadow:inset 0 6px 10px rgba(255,255,255,.5), 0 -6px 14px rgba(0,0,0,.2);
+    z-index:5;
+  }
+  .desk::before{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(90deg, rgba(0,0,0,.04) 0px, rgba(0,0,0,.04) 2px, transparent 2px, transparent 46px);
+  }
+  .desk::after{
+    content:"";position:absolute;top:0;left:0;right:0;height:6px;
+    background:rgba(255,255,255,.7);
+  }
+
   .buttons-row{
-    position:absolute;bottom:4%;left:0;right:0; display:flex;justify-content:space-between;align-items:flex-end;
+    position:absolute;bottom:2.5%;left:0;right:0; display:flex;justify-content:space-between;align-items:flex-end;
     padding:0 8vw;z-index:6;
   }
   .dome-btn{
@@ -172,6 +264,7 @@
   .dome-btn.ban{ background:radial-gradient(circle at 35% 25%, #ff7268, var(--red)); }
   .dome-btn.approve{ background:radial-gradient(circle at 35% 25%, #8fe07d, var(--grn)); }
   .dome-btn:active{ transform:translateY(6px); }
+  .dome-btn.disabled{ opacity:.35; filter:grayscale(70%); pointer-events:none; }
   .dome-label{ position:absolute;bottom:-30px;left:0;right:0;text-align:center;
     font-family:'Arial Black',sans-serif;font-size:15px;color:#0d1b06; text-shadow:0 1px 0 rgba(255,255,255,.4); }
   .dome-label.ban-label{color:#4a0d0a;}
@@ -179,30 +272,41 @@
   /* ================= JUMPSCARE ================= */
   .jumpscare-overlay{
     position:fixed; inset:0; z-index:999; display:flex;align-items:center;justify-content:center;
-    background:#000; opacity:0; pointer-events:none;
+    background:#fff; opacity:0; pointer-events:none; overflow:hidden;
   }
-  .jumpscare-overlay.show{ opacity:1; pointer-events:auto; animation:jsFlash .9s steps(2,end) forwards; }
-  @keyframes jsFlash{
-    0%{background:#000;}
-    10%{background:#4a0000;}
-    20%{background:#000;}
-    30%{background:#4a0000;}
-    100%{background:#1a0000;}
+  .jumpscare-overlay.show{ opacity:1; pointer-events:auto; animation:jsWhiteCut .12s steps(1,end) forwards; }
+  @keyframes jsWhiteCut{
+    0%{background:#fff;}
+    60%{background:#fff;}
+    100%{background:#000;}
+  }
+  .jumpscare-overlay::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,.06) 0px, transparent 1px, transparent 3px);
+    mix-blend-mode:overlay;
   }
   .jumpscare-face{
-    width:min(420px,70vw); animation:jsShake .12s linear infinite, jsGrow .9s ease-out forwards;
+    width:min(520px,85vw);
+    opacity:0;
+    animation:jsJumpcut .55s steps(1,end) forwards;
   }
-  @keyframes jsShake{
-    0%{transform:translate(0,0) scale(1);} 25%{transform:translate(-6px,4px) scale(1.01);}
-    50%{transform:translate(6px,-4px) scale(.99);} 75%{transform:translate(-4px,-6px) scale(1.02);}
-    100%{transform:translate(0,0) scale(1);}
+  @keyframes jsJumpcut{
+    0%{opacity:0; transform:scale(.3);}
+    12%{opacity:1; transform:translate(0,0) scale(1.4);}
+    26%{transform:translate(-14px,10px) scale(1.32);}
+    40%{transform:translate(12px,-12px) scale(1.42);}
+    54%{transform:translate(-10px,-8px) scale(1.34);}
+    68%{transform:translate(14px,10px) scale(1.4);}
+    82%{transform:translate(-8px,-6px) scale(1.36);}
+    100%{opacity:1; transform:translate(0,0) scale(1.38);}
   }
-  @keyframes jsGrow{ 0%{transform:scale(.3);} 100%{transform:scale(1);} }
   .jumpscare-text{
     position:absolute; bottom:8%; left:0;right:0; text-align:center;
     font-family:'Arial Black',sans-serif; font-size:clamp(22px,5vw,42px); color:#ff3b30;
     text-shadow:0 0 20px #ff0000; letter-spacing:2px;
+    opacity:0; animation:jsTextIn .1s steps(1,end) .45s forwards;
   }
+  @keyframes jsTextIn{ to{ opacity:1; } }
 
   /* ================= END ================= */
   #end-panel{ width:100%;height:100%;
@@ -227,36 +331,48 @@
 
   <!-- MAIN MENU -->
   <div id="menu-panel">
-    <div class="menu-inner">
-      <div class="title-row">
-        <h1 class="title">BAN SIMULATOR</h1>
-        <span class="title-2000">2000</span>
-      </div>
-      <div class="menu-body">
-        <div class="menu-buttons-col">
-          <button class="pill-btn" id="btn-play">PLAY</button>
-          <button class="pill-btn" id="btn-howto">SETTINGS &amp; HOW TO PLAY</button>
-          <button class="pill-btn" id="btn-exit">EXIT</button>
-        </div>
-        <div class="avatar-wrap">
-          <svg class="avatar-figure" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg">
-            <rect x="78" y="220" width="20" height="70" rx="6" fill="#26314a"/>
-            <rect x="104" y="220" width="20" height="70" rx="6" fill="#26314a"/>
-            <rect x="72" y="284" width="34" height="16" rx="4" fill="#7a1f18"/>
-            <rect x="98" y="284" width="34" height="16" rx="4" fill="#7a1f18"/>
-            <rect x="62" y="150" width="78" height="80" rx="14" fill="#161b22"/>
-            <rect x="93" y="150" width="16" height="80" fill="#2f6fb0"/>
-            <rect x="40" y="168" width="70" height="20" rx="10" fill="#eef1f3" transform="rotate(-8 40 168)"/>
-            <rect x="92" y="168" width="70" height="20" rx="10" fill="#eef1f3" transform="rotate(8 92 168)"/>
-            <circle cx="101" cy="108" r="46" fill="#eef1f3" stroke="#161b22" stroke-width="3"/>
-            <path d="M60 96 a41 41 0 0 1 82 0 v-6 a41 20 0 0 0 -82 0 z" fill="#2f6fb0"/>
-            <circle cx="86" cy="112" r="4" fill="#161b22"/>
-            <circle cx="116" cy="112" r="4" fill="#161b22"/>
-            <path d="M84 130 q17 12 34 0" stroke="#161b22" stroke-width="3" fill="none" stroke-linecap="round"/>
-          </svg>
-        </div>
-      </div>
+    <div class="menu-title">
+      <h1 class="title">BAN SIMULATOR</h1>
+      <span class="title-2000">2000</span>
     </div>
+
+    <div class="menu-buttons-col">
+      <button class="pill-btn" id="btn-play">PLAY</button>
+      <button class="pill-btn" id="btn-howto">SETTINGS &amp; HOW TO PLAY</button>
+      <button class="pill-btn" id="btn-exit">EXIT</button>
+    </div>
+
+    <div class="avatar-wrap">
+      <svg class="avatar-figure" viewBox="0 0 200 340" xmlns="http://www.w3.org/2000/svg">
+        <!-- shoes -->
+        <rect x="66" y="304" width="34" height="18" rx="6" fill="#7a1f18"/>
+        <rect x="102" y="304" width="34" height="18" rx="6" fill="#7a1f18"/>
+        <rect x="66" y="304" width="34" height="6" fill="#fff"/>
+        <rect x="102" y="304" width="34" height="6" fill="#fff"/>
+        <!-- legs / jeans -->
+        <rect x="72" y="232" width="24" height="76" rx="6" fill="#2a3a55"/>
+        <rect x="106" y="232" width="24" height="76" rx="6" fill="#2a3a55"/>
+        <!-- torso / dark jacket -->
+        <rect x="58" y="152" width="86" height="86" rx="16" fill="#161b22"/>
+        <!-- collar / tie -->
+        <rect x="94" y="152" width="14" height="86" fill="#2f6fb0"/>
+        <path d="M92 152 L108 152 L101 170 Z" fill="#dfe6ea"/>
+        <!-- arms crossed -->
+        <rect x="34" y="172" width="78" height="22" rx="11" fill="#eef1f3" transform="rotate(-10 34 172)"/>
+        <rect x="90" y="172" width="78" height="22" rx="11" fill="#eef1f3" transform="rotate(10 90 172)"/>
+        <!-- head -->
+        <circle cx="101" cy="110" r="48" fill="#eef1f3" stroke="#161b22" stroke-width="3"/>
+        <!-- cap -->
+        <path d="M56 100 a45 45 0 0 1 90 0 v-8 a45 22 0 0 0 -90 0 z" fill="#c62828"/>
+        <ellipse cx="101" cy="90" rx="46" ry="10" fill="#a51f1f"/>
+        <path d="M140 96 q22 2 28 14 q-16 4 -30 -4 Z" fill="#c62828"/>
+        <!-- face -->
+        <circle cx="86" cy="116" r="4" fill="#161b22"/>
+        <circle cx="116" cy="116" r="4" fill="#161b22"/>
+        <path d="M84 134 q17 12 34 0" stroke="#161b22" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+
     <div class="menu-footer">KEYBOARD: A = APPROVE&nbsp;&nbsp;&nbsp;D = BAN &nbsp;&nbsp;&nbsp;NO TIME LIMIT — TAKE YOUR TIME</div>
   </div>
 
@@ -266,10 +382,11 @@
       <div class="howto-title">HELPY'S TIPS</div>
       <div class="howto-screen">
         <p>Reports roll in one at a time. Read each one, then make the call — there's no clock, so take your time.</p>
-        <div class="howto-rule"><span class="tag ban">BAN</span><span style="color:#f4fff0;font-family:'Trebuchet MS',sans-serif;">Genuine rule-breaking: scams, harassment, exploits, doxxing, hate content.</span></div>
-        <div class="howto-rule"><span class="tag ok">OK</span><span style="color:#f4fff0;font-family:'Trebuchet MS',sans-serif;">Harmless or awkward behavior that isn't actually against the rules.</span></div>
-        <p>🙂 <b>Community meter</b> fills if you ban too many innocent players — max it and the server revolts.<br>
-        🧑‍🦳 <b>David's meter</b> fills a little every single time you approve (unban) someone, correct or not. David is watching from the window and keeping count — max it out and you will not enjoy what happens next.</p>
+        <div class="howto-rule"><span class="tag ban">BAN</span><span style="color:#f4fff0;font-family:'Trebuchet MS',sans-serif;">Total nonsense that still trips the filter — greetings, birthdays, harmless slang. It's silly, but that's the rule.</span></div>
+        <div class="howto-rule"><span class="tag ok">OK</span><span style="color:#f4fff0;font-family:'Trebuchet MS',sans-serif;">Genuinely normal player behavior. Let it be.</span></div>
+        <p><b>⚠ Keep an eye out for David.</b> He wanders in and out of the room. You can always hit APPROVE, on-screen or not — but if he's around to see it, he takes it personally.</p>
+        <p>🙂 <b>Community meter</b> fills if you ban a genuinely innocent player — max it and the server revolts.<br>
+        🧑‍🦳 <b>David's meter</b> only rises when he personally sees you hit APPROVE. Unban away when he's out of the room — it's free. Max him out and you will not enjoy what happens next.</p>
         <p>Chain correct calls for combo bonus points!</p>
       </div>
       <button class="pill-btn" id="btn-back-menu">GOT IT</button>
@@ -283,33 +400,46 @@
       <div class="window-mullions"></div>
 
       <!-- lurking figure, fades in as the Watcher meter rises -->
-      <svg class="overseer-lurker" id="overseer-lurker" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="100" cy="205" rx="80" ry="14" fill="rgba(0,0,0,.35)"/>
-        <!-- shoulders / shirt -->
-        <path d="M35 220 C35 165 60 140 100 140 C140 140 165 165 165 220 Z" fill="#1c1c1f"/>
+      <!-- David: walks fully on/off screen, clipped by the office walls -->
+      <div class="David-walker" id="David-walker">
+      <svg class="overseer-lurker" id="overseer-lurker" viewBox="0 0 140 300" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="70" cy="292" rx="46" ry="8" fill="rgba(0,0,0,.35)"/>
+        <!-- legs -->
+        <rect x="50" y="210" width="16" height="72" rx="6" fill="#2a2a2e"/>
+        <rect x="74" y="210" width="16" height="72" rx="6" fill="#2a2a2e"/>
+        <!-- shoes -->
+        <rect x="45" y="278" width="26" height="14" rx="5" fill="#111"/>
+        <rect x="69" y="278" width="26" height="14" rx="5" fill="#111"/>
+        <!-- torso / dark shirt -->
+        <rect x="38" y="140" width="64" height="78" rx="14" fill="#1c1c1f"/>
+        <!-- arms -->
+        <rect x="18" y="148" width="20" height="72" rx="10" fill="#1c1c1f"/>
+        <rect x="102" y="148" width="20" height="72" rx="10" fill="#1c1c1f"/>
+        <circle cx="28" cy="222" r="9" fill="#e0b48c"/>
+        <circle cx="112" cy="222" r="9" fill="#e0b48c"/>
         <!-- neck -->
-        <rect x="86" y="118" width="28" height="30" fill="#d8ad86"/>
+        <rect x="60" y="118" width="20" height="26" fill="#d8ad86"/>
         <!-- head -->
-        <circle cx="100" cy="88" r="46" fill="#e0b48c"/>
-        <!-- ears -->
-        <circle cx="56" cy="90" r="7" fill="#d8ad86"/>
-        <circle cx="144" cy="90" r="7" fill="#d8ad86"/>
+        <circle cx="70" cy="92" r="36" fill="#e0b48c"/>
+        <circle cx="36" cy="94" r="6" fill="#d8ad86"/>
+        <circle cx="104" cy="94" r="6" fill="#d8ad86"/>
         <!-- grey hair -->
-        <path d="M54 78 C54 40 78 24 100 24 C122 24 146 40 146 78 C146 60 128 46 100 46 C72 46 54 60 54 78 Z" fill="#9a9a9a"/>
-        <path d="M54 78 C50 66 52 54 60 46 L58 66 Z" fill="#9a9a9a"/>
-        <path d="M146 78 C150 66 148 54 140 46 L142 66 Z" fill="#9a9a9a"/>
+        <path d="M38 82 C38 52 56 40 70 40 C84 40 102 52 102 82 C102 66 88 56 70 56 C52 56 38 66 38 82 Z" fill="#9a9a9a"/>
+        <path d="M38 82 C35 72 36 62 42 56 L40 72 Z" fill="#9a9a9a"/>
+        <path d="M102 82 C105 72 104 62 98 56 L100 72 Z" fill="#9a9a9a"/>
         <!-- glasses -->
-        <rect x="62" y="82" width="34" height="24" rx="6" fill="none" stroke="#26221a" stroke-width="5"/>
-        <rect x="104" y="82" width="34" height="24" rx="6" fill="none" stroke="#26221a" stroke-width="5"/>
-        <line x1="96" y1="92" x2="104" y2="92" stroke="#26221a" stroke-width="5"/>
-        <line x1="62" y1="88" x2="48" y2="84" stroke="#26221a" stroke-width="4"/>
-        <line x1="138" y1="88" x2="152" y2="84" stroke="#26221a" stroke-width="4"/>
+        <rect x="46" y="86" width="24" height="18" rx="5" fill="none" stroke="#26221a" stroke-width="4"/>
+        <rect x="74" y="86" width="24" height="18" rx="5" fill="none" stroke="#26221a" stroke-width="4"/>
+        <line x1="70" y1="94" x2="74" y2="94" stroke="#26221a" stroke-width="4"/>
+        <line x1="46" y1="90" x2="36" y2="88" stroke="#26221a" stroke-width="3"/>
+        <line x1="98" y1="90" x2="108" y2="88" stroke="#26221a" stroke-width="3"/>
         <!-- eyes -->
-        <circle cx="79" cy="94" r="3" fill="#26221a"/>
-        <circle cx="121" cy="94" r="3" fill="#26221a"/>
-        <!-- neutral mouth -->
-        <path d="M86 116 Q100 122 114 116" stroke="#8a5a3a" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <circle cx="58" cy="95" r="2.4" fill="#26221a"/>
+        <circle cx="86" cy="95" r="2.4" fill="#26221a"/>
+        <!-- mouth -->
+        <path d="M60 112 Q70 117 80 112" stroke="#8a5a3a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
       </svg>
+      </div>
 
       <div class="floor"></div>
 
@@ -331,23 +461,31 @@
         <div class="score-line">SCORE <b id="score-num">0</b> &nbsp;•&nbsp; COMBO <b id="combo-num">0</b></div>
       </div>
 
-      <div class="case-monitor">
-        <div class="monitor">
-          <div class="monitor-screen">
-            <div class="feedback-flash" id="feedback-flash"></div>
-            <div class="case-user" id="case-user">Loading report…</div>
-            <div class="case-desc" id="case-desc">—</div>
-          </div>
-        </div>
-      </div>
+      <div class="feedback-flash" id="feedback-flash" style="position:absolute;top:0;left:0;right:0;bottom:0;"></div>
+
+      <div class="case-monitor" style="display:none;"></div>
 
       <!-- desk avatars: reported player models "walking up" to the desk each round -->
       <div class="desk-scene" id="desk-scene"></div>
 
+      <div class="desk"></div>
+
       <div class="buttons-row">
-        <button class="dome-btn approve" id="btn-approve"><span class="dome-label">APPROVE [A]</span></button>
-        <button class="dome-btn ban" id="btn-ban"><span class="dome-label ban-label">BAN [D]</span></button>
+        <button class="dome-btn approve disabled" id="btn-approve"><span class="dome-label">APPROVE [A]</span></button>
+        <button class="paper-btn" id="paper-btn">📄</button>
+        <button class="dome-btn ban disabled" id="btn-ban"><span class="dome-label ban-label">BAN [D]</span></button>
       </div>
+    </div>
+  </div>
+
+  <!-- PAPER OVERLAY: the report, blown up to fill the screen -->
+  <div class="paper-overlay" id="paper-overlay">
+    <div class="paper-sheet">
+      <div class="paper-kicker">Offensive Item Report</div>
+      <div class="paper-user" id="paper-user">Loading…</div>
+      <div class="paper-desc" id="paper-desc">—</div>
+      <div class="paper-flag" id="paper-flag" style="display:none;"></div>
+      <button class="paper-ok" id="paper-ok">OK!</button>
     </div>
   </div>
 
@@ -402,24 +540,20 @@
   ];
 
   var VIOLATIONS = [
-    "Said \"hi\" in the global chat.",
-    "Typed \"hello\" and then logged off immediately.",
-    "Wished a friend \"happy birthday\" in chat.",
-    "Asked another player what grade they're in.",
-    "Typed their age as a plain number.",
-    "Said \"brb\" without explaining where they were going.",
-    "Called a hard obby \"insane\" in the chat.",
-    "Used the word \"kill\" while describing killing time before dinner.",
-    "Said \"no\" to a trade request.",
-    "Typed a smiley face using a colon and a parenthesis.",
-    "Said \"I'm bored\" in general chat.",
-    "Used the word \"sus\" during an impostor-style game.",
-    "Asked \"how old is this game\" in the chat.",
-    "Typed \"lol\" in all capital letters.",
-    "Said \"gg\" before the round even ended.",
-    "Asked if anyone wanted to be friends.",
-    "Typed the word \"gun\" while describing a Nerf blaster toy.",
-    "Said \"see you tomorrow\" to a friend before logging off."
+    { desc: "Wished a friend \"happy birthday\" in chat.", flag: "birthday" },
+    { desc: "Asked another player what grade they're in.", flag: "grade" },
+    { desc: "Typed their age as a plain number.", flag: "age" },
+    { desc: "Called a hard obby \"insane\" in the chat.", flag: "insane" },
+    { desc: "Used the word \"kill\" while describing killing time before dinner.", flag: "kill" },
+    { desc: "Said \"no\" to a trade request.", flag: "no" },
+    { desc: "Typed a smiley face using a colon and a parenthesis.", flag: ":)" },
+    { desc: "Said \"I'm bored\" in general chat.", flag: "bored" },
+    { desc: "Used the word \"sus\" during an impostor-style game.", flag: "sus" },
+    { desc: "Asked \"how old is this game\" in the chat.", flag: "how old" },
+    { desc: "Typed \"lol\" in all capital letters.", flag: "LOL" },
+    { desc: "Said \"gg\" before the round even ended.", flag: "gg" },
+    { desc: "Asked if anyone wanted to be friends.", flag: "friends" },
+    { desc: "Typed the word \"gun\" while describing a Nerf blaster toy.", flag: "gun" }
   ];
 
   var FINE = [
@@ -439,7 +573,11 @@
     "Left a group chat without saying goodbye to anyone.",
     "Used way too many exclamation points in every single message!!!",
     "Named their pet dog in-game 'Sir Waffles the Bold'.",
-    "Got lost in an obby for twenty minutes and asked chat for directions."
+    "Got lost in an obby for twenty minutes and asked chat for directions.",
+    "Said \"hi\" in the global chat.",
+    "Typed \"hello\" and then logged off immediately.",
+    "Said \"brb\" without explaining where they were going.",
+    "Said \"see you tomorrow\" to a friend before logging off."
   ];
 
   // color palettes so each "3D model" at the desk looks a little different
@@ -449,7 +587,9 @@
   var state = {
     score:0, combo:0, bestCombo:0, level:1, casesJudged:0,
     community:20, overseer:0,
-    current:null, roundActive:false
+    current:null, roundActive:false,
+    DavidOnScreen:false, roamTimer:null, enterTimer:null, exitTimer:null,
+    paperSeen:false
   };
 
   var $ = function(id){ return document.getElementById(id); };
@@ -492,13 +632,28 @@
   function jumpscareSound(){
     try{
       if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+      // harsh noise burst
+      var bufferSize = Math.floor(actx.sampleRate * 0.4);
+      var buffer = actx.createBuffer(1, bufferSize, actx.sampleRate);
+      var data = buffer.getChannelData(0);
+      for(var i=0;i<bufferSize;i++){ data[i] = (Math.random()*2-1) * (1 - i/bufferSize); }
+      var noise = actx.createBufferSource();
+      noise.buffer = buffer;
+      var noiseGain = actx.createGain();
+      noiseGain.gain.value = 0.4;
+      noise.connect(noiseGain); noiseGain.connect(actx.destination);
+      noise.start();
+
+      // sharp descending shriek layered on top
       var o = actx.createOscillator(), g = actx.createGain();
-      o.type = "sawtooth"; o.frequency.setValueAtTime(60, actx.currentTime);
-      o.frequency.exponentialRampToValueAtTime(900, actx.currentTime + 0.35);
-      g.gain.value = 0.18;
-      o.connect(g); g.connect(actx.destination); o.start();
-      g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + 0.9);
-      o.stop(actx.currentTime + 0.9);
+      o.type = "sawtooth";
+      o.frequency.setValueAtTime(1400, actx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(70, actx.currentTime + 0.35);
+      g.gain.value = 0.25;
+      o.connect(g); g.connect(actx.destination);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + 0.45);
+      o.stop(actx.currentTime + 0.5);
     }catch(e){}
   }
 
@@ -507,8 +662,12 @@
 
   function newCase(){
     var isViolation = Math.random() < 0.5;
-    var desc = isViolation ? pick(VIOLATIONS) : pick(FINE);
-    return { user: pick(USERNAMES), desc: desc, verdict: isViolation ? "ban" : "approve" };
+    if(isViolation){
+      var v = pick(VIOLATIONS);
+      return { user: pick(USERNAMES), desc: v.desc, flag: v.flag, verdict: "ban" };
+    } else {
+      return { user: pick(USERNAMES), desc: pick(FINE), flag: null, verdict: "approve" };
+    }
   }
 
   function updateHud(){
@@ -517,14 +676,41 @@
     $("level-num").textContent = state.level;
     $("meter-community").style.height = state.community + "%";
     $("meter-overseer").style.height = state.overseer + "%";
-    var lurker = $("overseer-lurker");
-    lurker.style.opacity = (state.overseer/100 * 0.9).toFixed(2);
-    lurker.style.transform = "translateX(-50%) translateY(" + (20 - state.overseer*0.18) + "px) scale(" + (0.85 + state.overseer/100*0.4) + ")";
   }
 
   function renderCase(){
-    $("case-user").textContent = state.current.user;
-    $("case-desc").textContent = state.current.desc;
+    $("paper-user").textContent = state.current.user;
+    $("paper-desc").textContent = state.current.desc;
+    var flagEl = $("paper-flag");
+    if(state.current.flag){
+      flagEl.textContent = "Content filter picked up (" + state.current.flag + ")";
+      flagEl.style.display = "inline-block";
+    } else {
+      flagEl.style.display = "none";
+    }
+  }
+
+  function setVerdictButtonsEnabled(enabled){
+    $("btn-ban").classList.toggle("disabled", !enabled);
+    $("btn-approve").classList.toggle("disabled", !enabled);
+  }
+
+  function openPaper(){
+    var overlay = $("paper-overlay");
+    var btn = $("paper-btn");
+    var rect = btn.getBoundingClientRect();
+    var originX = ((rect.left + rect.width/2) / window.innerWidth * 100).toFixed(1) + "%";
+    var originY = ((rect.top + rect.height/2) / window.innerHeight * 100).toFixed(1) + "%";
+    overlay.querySelector(".paper-sheet").style.transformOrigin = originX + " " + originY;
+    overlay.classList.add("show");
+  }
+
+  function closePaper(){
+    $("paper-overlay").classList.remove("show");
+    if(!state.paperSeen){
+      state.paperSeen = true;
+      setVerdictButtonsEnabled(true);
+    }
   }
 
   function buildDeskAvatar(mirror){
@@ -563,6 +749,63 @@
     if(avatar) avatar.classList.remove("in");
   }
 
+  function setDavidOnScreen(value){
+    state.DavidOnScreen = value;
+  }
+
+  var David_OFF_SCREEN = 65;   // vw offset — well past either edge, clipped by overflow:hidden
+  var David_ON_SCREEN_BOUND = 38; // vw offset — inside this range counts as "visible"
+
+  function DavidRoamCycle(){
+    var walker = $("David-walker");
+    if(!walker) return;
+
+    var leftToRight = Math.random() < 0.5;
+    var startX = leftToRight ? -David_OFF_SCREEN : David_OFF_SCREEN;
+    var endX = leftToRight ? David_OFF_SCREEN : -David_OFF_SCREEN;
+    var scale = 0.85 + (state.overseer/100)*0.3;
+    var walkDuration = 5000 + Math.random()*2500;
+
+    // snap instantly to the starting off-screen position, no transition
+    walker.style.transition = "none";
+    walker.style.transform = "translate(-50%,0) translateX(" + startX + "vw) scale(" + scale.toFixed(2) + ")";
+    // force a reflow so the snap is applied before the animated walk starts
+    walker.getBoundingClientRect();
+    walker.style.transition = "transform " + walkDuration + "ms linear";
+    requestAnimationFrame(function(){
+      walker.style.transform = "translate(-50%,0) translateX(" + endX + "vw) scale(" + scale.toFixed(2) + ")";
+    });
+
+    var totalDist = David_OFF_SCREEN * 2;
+    var enterFrac = (David_OFF_SCREEN - David_ON_SCREEN_BOUND) / totalDist;
+    var exitFrac = (David_OFF_SCREEN + David_ON_SCREEN_BOUND) / totalDist;
+
+    clearTimeout(state.enterTimer);
+    clearTimeout(state.exitTimer);
+    state.enterTimer = setTimeout(function(){ setDavidOnScreen(true); }, walkDuration * enterFrac);
+    state.exitTimer = setTimeout(function(){ setDavidOnScreen(false); }, walkDuration * exitFrac);
+
+    var hiddenFor = 1200 + Math.random()*2000;
+    state.roamTimer = setTimeout(DavidRoamCycle, walkDuration + hiddenFor);
+  }
+
+  function startDavidRoam(){
+    stopDavidRoam();
+    state.roamTimer = setTimeout(DavidRoamCycle, 600);
+  }
+
+  function stopDavidRoam(){
+    clearTimeout(state.roamTimer);
+    clearTimeout(state.enterTimer);
+    clearTimeout(state.exitTimer);
+    setDavidOnScreen(false);
+    var walker = $("David-walker");
+    if(walker){
+      walker.style.transition = "none";
+      walker.style.transform = "translate(-50%,0) translateX(-" + David_OFF_SCREEN + "vw) scale(0.85)";
+    }
+  }
+
   function flashFeedback(correct){
     var el = $("feedback-flash");
     el.className = "feedback-flash show " + (correct ? "correct" : "wrong");
@@ -574,7 +817,9 @@
     if(!state.roundActive) return;
     state.roundActive = false;
 
-    var correct = choice === state.current.verdict;
+    var trueVerdict = state.current.verdict; // 'ban' or 'approve'
+    var correct = choice === trueVerdict;
+
     state.casesJudged++;
     hideDeskAvatar();
 
@@ -590,12 +835,15 @@
       flashFeedback(false);
     }
 
-    // every approval (unban) feeds the Watcher, correct or not
-    if(choice === "approve"){
+    // David only gets angrier when he personally sees you unban someone
+    // (the approve button is locked out entirely while he's on screen,
+    // so this can only fire when he's off screen — never rises)
+    if(choice === "approve" && state.DavidOnScreen){
       state.overseer = clamp(state.overseer + 14, 0, 100);
     }
-    // wrongly banning an innocent player angers the community
-    if(!correct && state.current.verdict === "approve"){
+    // wrongly banning a genuinely innocent player angers the community —
+    // this can happen if David forces your hand into a ban-only round
+    if(choice === "ban" && trueVerdict === "approve"){
       state.community = clamp(state.community + 18, 0, 100);
     } else if(correct){
       state.community = clamp(state.community - 1, 0, 100);
@@ -619,18 +867,22 @@
 
   function nextRound(){
     state.current = newCase();
+    state.paperSeen = false;
     renderCase();
+    setVerdictButtonsEnabled(false);
+    $("paper-btn").classList.remove("disabled");
     showDeskAvatar();
     state.roundActive = true;
   }
 
   function triggerJumpscare(){
+    stopDavidRoam();
     jumpscareSound();
     jumpscareOverlay.classList.add("show");
     setTimeout(function(){
       jumpscareOverlay.classList.remove("show");
       endGame("overseer");
-    }, 1100);
+    }, 750);
   }
 
   function startGame(){
@@ -639,11 +891,13 @@
     updateHud();
     showOnly(gamePanel);
     spawnClouds();
+    startDavidRoam();
     nextRound();
   }
 
   function endGame(cause){
     state.roundActive = false;
+    stopDavidRoam();
     var icon, title, sub;
     if(cause === "community"){
       icon = "🔥"; title = "SERVER REVOLT";
@@ -672,13 +926,15 @@
     menuPanel.innerHTML = '<h1 class="title" style="font-size:28px;text-align:center;width:100%;">Thanks for playing!</h1>' +
       '<p style="text-align:center;color:#0d1b06;font-family:\'Trebuchet MS\',sans-serif;">You may now close this tab.</p>';
   });
+  $("paper-btn").addEventListener("click", function(){ if(state.roundActive) openPaper(); });
+  $("paper-ok").addEventListener("click", closePaper);
   $("btn-approve").addEventListener("click", function(){ handleVerdict("approve"); });
   $("btn-ban").addEventListener("click", function(){ handleVerdict("ban"); });
   $("btn-retry").addEventListener("click", startGame);
   $("btn-to-menu").addEventListener("click", function(){ showOnly(menuPanel); });
 
   document.addEventListener("keydown", function(e){
-    if(!state.roundActive) return;
+    if(!state.roundActive || !state.paperSeen) return;
     var k = e.key.toLowerCase();
     if(k === "a") handleVerdict("approve");
     if(k === "d") handleVerdict("ban");
